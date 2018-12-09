@@ -52,6 +52,9 @@
 (defmethod project-directory ((project-name symbol)(dirname (eql :src)))
   (merge-pathnames "src/" (project-root-directory project-name)))
 
+(defmethod project-directory ((project-name symbol)(dirname (eql :templates)))
+  (merge-pathnames "templates/" (project-root-directory project-name)))
+
 (defmethod project-directory ((project-name symbol)(dirname (eql :public/css)))
   (merge-pathnames "public/css/" (project-root-directory project-name)))
 
@@ -61,7 +64,9 @@
 (defmethod project-directory ((project-name symbol)(dirname (eql :public/js)))
   (merge-pathnames "public/js/" (project-root-directory project-name)))
 
-;;; (define-project :hello #p"/Users/mikel/Laboratory/weave-projects/hello/")
+;;; (define-project :hello #p"/Users/mikel/weave-projects/hello/")
+;;; (find-project :hello)
+;;; (find-project :goodbye)
 ;;; (project-directory :hello :root)
 ;;; (project-directory :hello :public/js)
 
@@ -72,3 +77,11 @@
 ;;; creating project directories
 ;;; ---------------------------------------------------------------------
 
+(defmethod ensure-project-directories ((project-name symbol))
+  (assert (find-project project-name)()
+          "Project ~S not found" project-name)
+  (dolist (dirname (list :root :public :src :templates :public/css :public/images :public/js))
+    (let ((dir (project-directory project-name dirname)))
+      (ensure-directories-exist dir))))
+
+;;; (ensure-project-directories :hello)

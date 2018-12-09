@@ -1,4 +1,4 @@
-;;;; weave.asd
+;;;; Weave.asd
 
 (asdf:defsystem #:weave
   :description "Describe weave here"
